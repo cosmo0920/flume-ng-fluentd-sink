@@ -28,11 +28,11 @@ public class FluentdSink extends AbstractSink implements Configurable {
 	private String hostname;
 	private int port;
 	private String tag;
-	private Fluency fluentLogger; // TODO: extract this member to other class for safety.
+	private Fluency fluency; // TODO: extract this member to other class for safety.
 
 	private CounterGroup counterGroup;
 
-	public Fluency setupFluentdLogger(String hostname, int port) throws  IOException {
+	public Fluency setupFluency(String hostname, int port) throws  IOException {
 		return Fluency.defaultFluency(hostname, port, new Fluency.Config());
 	}
 
@@ -63,10 +63,10 @@ public class FluentdSink extends AbstractSink implements Configurable {
 		Preconditions.checkState(tag != null, "No tag specified");
 	}
 
-	private void closeFluentdLogger() {
-		if (this.fluentLogger != null) {
+	private void closeFluency() {
+		if (this.fluency != null) {
 			try {
-				this.fluentLogger.close();
+				this.fluency.close();
 			} catch (IOException e) {
 				// Do nothing.
 			}
@@ -78,12 +78,12 @@ public class FluentdSink extends AbstractSink implements Configurable {
 		logger.info("Fluentd sink starting");
 
 		try {
-			this.fluentLogger = setupFluentdLogger(this.hostname, this.port);
+			this.fluency = setupFluency(this.hostname, this.port);
 		} catch (IOException e) {
 			logger.error("Unable to create Fluentd logger using hostname:"
 						 + hostname + " port:" + port + ". Exception follows.", e);
 
-			closeFluentdLogger();
+			closeFluency();
 
 			return; // FIXME: mark this plugin as failed.
 		}
@@ -97,7 +97,7 @@ public class FluentdSink extends AbstractSink implements Configurable {
 	public void stop() {
 		logger.info("Fluentd sink {} stopping", this.getName());
 
-		closeFluentdLogger();
+		closeFluency();
 
 		super.stop();
 
