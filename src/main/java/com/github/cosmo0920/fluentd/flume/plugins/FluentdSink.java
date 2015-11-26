@@ -73,6 +73,8 @@ public class FluentdSink extends AbstractSink implements Configurable {
 				// Do nothing.
 			}
 		}
+
+		fluency = null;
 	}
 
 	private void sendFluency(Event event) throws IOException {
