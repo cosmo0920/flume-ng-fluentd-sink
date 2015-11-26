@@ -77,6 +77,7 @@ public class FluentdSink extends AbstractSink implements Configurable {
 		fluency = null;
 	}
 
+	// TODO: JSON encoded body support.
 	private void sendFluency(Event event) throws IOException {
 		String body = new String(event.getBody());
 		Map<String, Object> fluencyEvent = new HashMap<String, Object>();
