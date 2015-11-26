@@ -108,9 +108,9 @@ public class FluentdSink extends AbstractSink implements Configurable {
 			Event event = channel.take();
 
 			if (event == null) {
-				 counterGroup.incrementAndGet("event.empty");
-				 status = Status.BACKOFF;
-				 transaction.rollback();
+				counterGroup.incrementAndGet("event.empty");
+				status = Status.BACKOFF;
+				transaction.rollback();
 			} else {
 				publisher.send(event);
 				counterGroup.incrementAndGet("event.fluentd");
