@@ -34,7 +34,7 @@ public class FluentdSink extends AbstractSink implements Configurable {
 
 	private CounterGroup counterGroup;
 
-	public Fluency setupFluency(String hostname, int port) throws  IOException {
+	private Fluency setupFluency(String hostname, int port) throws  IOException {
 		return Fluency.defaultFluency(hostname, port, new Fluency.Config());
 	}
 
