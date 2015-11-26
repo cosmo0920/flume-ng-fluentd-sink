@@ -30,7 +30,7 @@ public class FluentdSink extends AbstractSink implements Configurable {
 	private String hostname;
 	private int port;
 	private String tag;
-	private Fluency fluency; // TODO: extract this member to other class for safety.
+	private FluencyPublisher publisher;
 
 	private CounterGroup counterGroup;
 
@@ -59,30 +59,9 @@ public class FluentdSink extends AbstractSink implements Configurable {
 
 		Preconditions.checkState(hostname != null, "No hostname specified");
 		Preconditions.checkState(tag != null, "No tag specified");
-	}
 
-	private Fluency setupFluency(String hostname, int port) throws  IOException {
-		return Fluency.defaultFluency(hostname, port, new Fluency.Config());
-	}
+		publisher = new FluencyPublisher(tag);
 
-	private void closeFluency() {
-		if (fluency != null) {
-			try {
-				fluency.close();
-			} catch (IOException e) {
-				// Do nothing.
-			}
-		}
-
-		fluency = null;
-	}
-
-	// TODO: JSON encoded body support.
-	private void sendFluency(Event event) throws IOException {
-		String body = new String(event.getBody());
-		Map<String, Object> fluencyEvent = new HashMap<String, Object>();
-		fluencyEvent.put("message", body);
-		fluency.emit(tag, fluencyEvent);
 	}
 
 	@Override
@@ -90,12 +69,12 @@ public class FluentdSink extends AbstractSink implements Configurable {
 		logger.info("Fluentd sink starting");
 
 		try {
-			fluency = setupFluency(hostname, port);
+			publisher.setup(hostname, port);
 		} catch (IOException e) {
 			logger.error("Unable to create Fluentd logger using hostname:"
 						 + hostname + " port:" + port + ". Exception follows.", e);
 
-			closeFluency();
+			publisher.close();
 
 			return; // FIXME: mark this plugin as failed.
 		}
@@ -109,7 +88,7 @@ public class FluentdSink extends AbstractSink implements Configurable {
 	public void stop() {
 		logger.info("Fluentd sink {} stopping", this.getName());
 
-		closeFluency();
+		publisher.close();
 
 		super.stop();
 
@@ -131,7 +110,7 @@ public class FluentdSink extends AbstractSink implements Configurable {
 				 counterGroup.incrementAndGet("event.empty");
 				 status = Status.BACKOFF;
 			} else {
-				sendFluency(event);
+				publisher.send(event);
 				counterGroup.incrementAndGet("event.fluentd");
 			}
 
@@ -148,7 +127,7 @@ public class FluentdSink extends AbstractSink implements Configurable {
 					"Unable to communicate with Fluentd. Exception follows.",
 					e);
 			status = Status.BACKOFF;
-			closeFluency();
+			publisher.close();
 		} finally {
 			transaction.close();
 		}
