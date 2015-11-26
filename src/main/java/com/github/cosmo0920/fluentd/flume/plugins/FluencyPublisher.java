@@ -3,6 +3,7 @@ import org.apache.flume.Event;
 
 import org.komamitsu.fluency.Fluency;
 
+import java.nio.charset.StandardCharsets;
 import java.io.IOException;
 import java.util.Map;
 import java.util.HashMap;
@@ -33,7 +34,7 @@ class FluencyPublisher {
 
 	// TODO: JSON encoded body support.
 	public void send(Event event) throws IOException {
-		String body = new String(event.getBody());
+		String body = new String(event.getBody(), StandardCharsets.UTF_8);
 		Map<String, Object> fluencyEvent = new HashMap<String, Object>();
 		fluencyEvent.put("message", body);
 		fluency.emit(tag, fluencyEvent);
