@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.komamitsu.fluency.Fluency;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.HashMap;
 
 import com.google.common.base.Preconditions;
 
@@ -73,6 +75,13 @@ public class FluentdSink extends AbstractSink implements Configurable {
 		}
 	}
 
+	private void sendFluency(Event event) throws IOException {
+		String body = new String(event.getBody());
+		Map<String, Object> fluencyEvent = new HashMap<String, Object>();
+		fluencyEvent.put("message", body);
+		fluency.emit(tag, fluencyEvent);
+	}
+
 	@Override
 	public void start() {
 		logger.info("Fluentd sink starting");
@@ -119,7 +128,7 @@ public class FluentdSink extends AbstractSink implements Configurable {
 				 counterGroup.incrementAndGet("event.empty");
 				 status = Status.BACKOFF;
 			} else {
-				// TODO: send info Fluentd.
+				sendFluency(event);
 				counterGroup.incrementAndGet("event.fluentd");
 			}
 
@@ -130,13 +139,13 @@ public class FluentdSink extends AbstractSink implements Configurable {
 			logger.error(
 					"Unable to get event from channel. Exception follows.", e);
 			status = Status.BACKOFF;
-		} catch (Exception e) {
+		} catch (IOException e) {
 			transaction.rollback();
 			logger.error(
 					"Unable to communicate with Fluentd. Exception follows.",
 					e);
 			status = Status.BACKOFF;
-			// TODO: destroy connection to Fluentd.
+			closeFluency();
 		} finally {
 			transaction.close();
 		}
