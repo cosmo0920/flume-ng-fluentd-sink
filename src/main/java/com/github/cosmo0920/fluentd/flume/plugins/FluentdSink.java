@@ -30,7 +30,8 @@ public class FluentdSink extends AbstractSink implements Configurable {
 	private String hostname;
 	private int port;
 	private String tag;
-	private FluencyPublisher publisher;
+	// @VisibleForTesting
+	public FluencyPublisher publisher;
 
 	private CounterGroup counterGroup;
 
