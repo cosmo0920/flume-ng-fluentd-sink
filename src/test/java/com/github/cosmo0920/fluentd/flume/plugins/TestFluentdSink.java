@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 
 import org.apache.flume.Sink.Status;
 import org.apache.flume.Channel;
+import org.apache.flume.ChannelException;
 import org.apache.flume.Event;
 import org.apache.flume.Transaction;
 import org.apache.flume.EventDeliveryException;
@@ -90,6 +91,28 @@ public class TestFluentdSink {
 
 		when(mockChannel.getTransaction()).thenReturn(mockTransaction);
 		when(mockChannel.take()).thenReturn(null);
+
+		FluentdSink sink = new FluentdSink();
+		sink.setChannel(mockChannel);
+		sink.publisher = mockFluencyPublisher;
+		assertNotNull(sink.publisher);
+
+		Status status = sink.process();
+		assertEquals(status, Status.BACKOFF);
+
+		verify(mockTransaction, times(1)).begin();
+		verify(mockTransaction, times(1)).rollback();
+		verify(mockTransaction, times(1)).close();
+	}
+
+	@Test
+	public void testShouldRollbackWhenUnableToGetEventsFromChannel() throws EventDeliveryException, IOException {
+		Channel mockChannel = mock(Channel.class);
+		Transaction mockTransaction = mock(Transaction.class);
+		FluencyPublisher mockFluencyPublisher = mock(FluencyPublisher.class);
+
+		when(mockChannel.getTransaction()).thenReturn(mockTransaction);
+		doThrow(new ChannelException("Mock Exception")).when(mockChannel).take();
 
 		FluentdSink sink = new FluentdSink();
 		sink.setChannel(mockChannel);
