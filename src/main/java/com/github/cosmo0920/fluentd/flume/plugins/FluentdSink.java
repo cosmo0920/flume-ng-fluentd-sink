@@ -34,10 +34,6 @@ public class FluentdSink extends AbstractSink implements Configurable {
 
 	private CounterGroup counterGroup;
 
-	private Fluency setupFluency(String hostname, int port) throws  IOException {
-		return Fluency.defaultFluency(hostname, port, new Fluency.Config());
-	}
-
 	public FluentdSink() {
 		counterGroup = new CounterGroup();
 	}
@@ -63,6 +59,10 @@ public class FluentdSink extends AbstractSink implements Configurable {
 
 		Preconditions.checkState(hostname != null, "No hostname specified");
 		Preconditions.checkState(tag != null, "No tag specified");
+	}
+
+	private Fluency setupFluency(String hostname, int port) throws  IOException {
+		return Fluency.defaultFluency(hostname, port, new Fluency.Config());
 	}
 
 	private void closeFluency() {
