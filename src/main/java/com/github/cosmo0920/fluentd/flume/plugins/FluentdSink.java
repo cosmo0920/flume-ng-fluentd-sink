@@ -64,9 +64,9 @@ public class FluentdSink extends AbstractSink implements Configurable {
 	}
 
 	private void closeFluency() {
-		if (this.fluency != null) {
+		if (fluency != null) {
 			try {
-				this.fluency.close();
+				fluency.close();
 			} catch (IOException e) {
 				// Do nothing.
 			}
@@ -78,7 +78,7 @@ public class FluentdSink extends AbstractSink implements Configurable {
 		logger.info("Fluentd sink starting");
 
 		try {
-			this.fluency = setupFluency(this.hostname, this.port);
+			fluency = setupFluency(hostname, port);
 		} catch (IOException e) {
 			logger.error("Unable to create Fluentd logger using hostname:"
 						 + hostname + " port:" + port + ". Exception follows.", e);
