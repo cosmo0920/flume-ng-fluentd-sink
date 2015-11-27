@@ -1,17 +1,9 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        maven { url 'https://repo.spring.io/plugins-release' }
-    }
-    dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.2'
-    }
+plugins {
+  id 'java'
+  id 'maven'
+  id 'findbugs'
+  id 'com.github.johnrengelman.shadow' version '1.2.2'
 }
-
-apply plugin: 'java'
-apply plugin: 'maven'
-apply plugin: 'findbugs'
-// apply plugin: 'com.github.johnrengelman.shadow'
 
 version = '0.0.1'
 group = 'com.github.cosmo0920'
