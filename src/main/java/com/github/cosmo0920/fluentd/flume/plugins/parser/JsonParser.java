@@ -1,4 +1,4 @@
-package com.github.cosmo0920.fluentd.flume.plugins;
+package com.github.cosmo0920.fluentd.flume.plugins.parser;
 
 import java.util.Map;
 import java.util.HashMap;

@@ -10,14 +10,20 @@ import java.util.HashMap;
 import java.lang.RuntimeException;
 import java.lang.UnsupportedOperationException;
 
+import com.github.cosmo0920.fluentd.flume.plugins.parser.EventParser;
+import com.github.cosmo0920.fluentd.flume.plugins.parser.PlainTextParser;
+import com.github.cosmo0920.fluentd.flume.plugins.parser.JsonParser;
+
 class FluencyPublisher {
 	private Fluency fluency;
 	private String tag;
 	private String format;
+	private EventParser parser;
 
 	public FluencyPublisher(String tag, String format) {
 		this.tag = tag;
 		this.format = format;
+		this.parser = setupEventParser();
 	}
 
 	public void setup(String hostname, int port) throws IOException {
@@ -38,17 +44,15 @@ class FluencyPublisher {
 
 	public void publish(Event event) throws IOException, Exception {
 		String body = new String(event.getBody(), StandardCharsets.UTF_8);
-		switch(format) {
+		fluency.emit(tag, parser.parse(body));
+	}
+
+	private EventParser setupEventParser() {
+		switch (format) {
 		case "text":
-			Map<String, Object> fluencyEvent = new HashMap<String, Object>();
-			fluencyEvent.put("message", body);
-			fluency.emit(tag, fluencyEvent);
-			break;
+			return new PlainTextParser();
 		case "json":
-			// TODO: constrct parser at instantiated time
-			JsonParser parser = new JsonParser();
-			fluency.emit(tag, parser.parse(body));
-			break;
+			return new JsonParser();
 		default:
 			throw new RuntimeException(format + " format is not supported");
 		}
