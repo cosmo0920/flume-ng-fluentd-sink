@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 import com.google.common.base.Preconditions;
+import com.google.common.annotations.VisibleForTesting;
 
 public class FluentdSink extends AbstractSink implements Configurable {
 	private static final Logger logger = LoggerFactory.getLogger(FluentdSink.class);
@@ -30,7 +31,8 @@ public class FluentdSink extends AbstractSink implements Configurable {
 	private String hostname;
 	private int port;
 	private String tag;
-	// @VisibleForTesting
+
+	@VisibleForTesting
 	public FluencyPublisher publisher;
 
 	private CounterGroup counterGroup;
