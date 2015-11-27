@@ -73,8 +73,12 @@ public class TestFluentdSink {
 		sink.setChannel(mockChannel);
 		sink.publisher = mockFluencyPublisher;
 		assertNotNull(sink.publisher);
-		doThrow(new IOException()).when(mockFluencyPublisher).publish(mockEvent);
 
+		try {
+			doThrow(new IOException()).when(mockFluencyPublisher).publish(mockEvent);
+		} catch (Exception e) {
+			fail("fail!");
+		}
 		Status status = sink.process();
 		assertEquals(status, Status.BACKOFF);
 

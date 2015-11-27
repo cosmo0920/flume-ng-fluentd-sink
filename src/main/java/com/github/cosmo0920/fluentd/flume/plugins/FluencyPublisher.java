@@ -20,7 +20,7 @@ class FluencyPublisher {
 		this.format = format;
 	}
 
-	public void setup(String hostname, int port) throws  IOException {
+	public void setup(String hostname, int port) throws IOException {
 		fluency = Fluency.defaultFluency(hostname, port, new Fluency.Config());
 	}
 
@@ -36,17 +36,19 @@ class FluencyPublisher {
 		fluency = null;
 	}
 
-	public void publish(Event event) throws IOException {
+	public void publish(Event event) throws IOException, Exception {
+		String body = new String(event.getBody(), StandardCharsets.UTF_8);
 		switch(format) {
 		case "text":
-			String body = new String(event.getBody(), StandardCharsets.UTF_8);
 			Map<String, Object> fluencyEvent = new HashMap<String, Object>();
 			fluencyEvent.put("message", body);
 			fluency.emit(tag, fluencyEvent);
 			break;
 		case "json":
-			// TODO: JSON encoded body support.
-			throw new UnsupportedOperationException(format + " format is not supported");
+			// TODO: constrct parser at instantiated time
+			JsonParser parser = new JsonParser();
+			fluency.emit(tag, parser.parse(body));
+			break;
 		default:
 			throw new RuntimeException(format + " format is not supported");
 		}
