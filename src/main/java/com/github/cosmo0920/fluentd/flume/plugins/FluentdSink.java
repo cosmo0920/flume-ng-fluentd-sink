@@ -31,6 +31,7 @@ public class FluentdSink extends AbstractSink implements Configurable {
 	private String hostname;
 	private int port;
 	private String tag;
+	private String format;
 
 	@VisibleForTesting
 	public FluencyPublisher publisher;
@@ -45,6 +46,7 @@ public class FluentdSink extends AbstractSink implements Configurable {
 		hostname = context.getString("hostname");
 		String portStr = context.getString("port");
 		tag = context.getString("tag");
+		format = context.getString("format");
 
 		if (portStr != null) {
 			port = Integer.parseInt(portStr);
@@ -62,8 +64,9 @@ public class FluentdSink extends AbstractSink implements Configurable {
 
 		Preconditions.checkState(hostname != null, "No hostname specified");
 		Preconditions.checkState(tag != null, "No tag specified");
+		Preconditions.checkState(format != null, "No format specified");
 
-		publisher = new FluencyPublisher(tag);
+		publisher = new FluencyPublisher(tag, format);
 	}
 
 	@Override
