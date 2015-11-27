@@ -124,7 +124,8 @@ public class FluentdSink extends AbstractSink implements Configurable {
 		} catch (ChannelException e) {
 			transaction.rollback();
 			logger.error(
-					"Unable to get event from channel. Exception follows.", e);
+					"Unable to get event from channel. Exception follows.",
+					e);
 			status = Status.BACKOFF;
 		} catch (IOException e) {
 			transaction.rollback();
