@@ -24,7 +24,7 @@ import com.google.common.annotations.VisibleForTesting;
 public class FluentdSink extends AbstractSink implements Configurable {
 	private static final Logger logger = LoggerFactory.getLogger(FluentdSink.class);
 
-	private static final int DEFAULT_PORT = 24424;
+	private static final int DEFAULT_PORT = 24224;
 	private static final String DEFAULT_HOST = "localhost";
 	private static final String DEFAULT_TAG = "flume.fluentd.sink";
 
