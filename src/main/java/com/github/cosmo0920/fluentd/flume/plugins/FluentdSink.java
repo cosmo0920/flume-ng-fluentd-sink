@@ -64,7 +64,6 @@ public class FluentdSink extends AbstractSink implements Configurable {
 		Preconditions.checkState(tag != null, "No tag specified");
 
 		publisher = new FluencyPublisher(tag);
-
 	}
 
 	@Override
