@@ -47,7 +47,7 @@ Create all-in-one jar file.
 $ ./gradlew shadowJar
 ```
 
-Put your $FLUME_HOME/lib created all-in-one jar file.
+Put created all-in-one jar file into your $FLUME_HOME/lib.
 
 ## LICENSE
 
