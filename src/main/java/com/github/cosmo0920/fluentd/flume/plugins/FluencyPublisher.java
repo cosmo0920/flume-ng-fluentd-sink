@@ -33,7 +33,7 @@ class FluencyPublisher {
 	}
 
 	// TODO: JSON encoded body support.
-	public void send(Event event) throws IOException {
+	public void publish(Event event) throws IOException {
 		String body = new String(event.getBody(), StandardCharsets.UTF_8);
 		Map<String, Object> fluencyEvent = new HashMap<String, Object>();
 		fluencyEvent.put("message", body);

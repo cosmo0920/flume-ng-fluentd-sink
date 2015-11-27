@@ -112,7 +112,7 @@ public class FluentdSink extends AbstractSink implements Configurable {
 				status = Status.BACKOFF;
 				transaction.rollback();
 			} else {
-				publisher.send(event);
+				publisher.publish(event);
 				counterGroup.incrementAndGet("event.fluentd");
 				transaction.commit();
 			}
