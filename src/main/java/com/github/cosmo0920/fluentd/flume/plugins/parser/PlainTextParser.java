@@ -2,7 +2,6 @@ package com.github.cosmo0920.fluentd.flume.plugins.parser;
 
 import java.util.Map;
 import java.util.HashMap;
-import java.io.IOException;
 
 public class PlainTextParser extends EventParser {
 	public PlainTextParser () {

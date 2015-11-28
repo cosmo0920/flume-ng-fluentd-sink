@@ -28,8 +28,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.HashMap;
 
 public class TestFluentdSink {
 	private static final Logger logger = LoggerFactory.getLogger(FluentdSink.class);

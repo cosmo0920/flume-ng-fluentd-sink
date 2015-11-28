@@ -5,10 +5,7 @@ import org.komamitsu.fluency.Fluency;
 
 import java.nio.charset.StandardCharsets;
 import java.io.IOException;
-import java.util.Map;
-import java.util.HashMap;
 import java.lang.RuntimeException;
-import java.lang.UnsupportedOperationException;
 
 import com.github.cosmo0920.fluentd.flume.plugins.parser.EventParser;
 import com.github.cosmo0920.fluentd.flume.plugins.parser.PlainTextParser;
