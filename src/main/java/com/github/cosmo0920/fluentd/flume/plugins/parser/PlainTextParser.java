@@ -10,7 +10,7 @@ public class PlainTextParser extends EventParser {
 
 	@Override
 	public Map<String, Object> parse(String entry) {
-		Map<String, Object> event = new HashMap<String, Object>();
+		Map<String, Object> event = new HashMap<>();
 		event.put("message", entry);
 		return event;
 	}
