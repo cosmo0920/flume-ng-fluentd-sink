@@ -128,4 +128,33 @@ public class TestFluentdSink {
 		verify(mockTransaction, times(1)).rollback();
 		verify(mockTransaction, times(1)).close();
 	}
+
+	@Test
+	public void testShouldRollbackWhenUnableToParseEvents() throws EventDeliveryException, RuntimeException {
+		Channel mockChannel = mock(Channel.class);
+		Transaction mockTransaction = mock(Transaction.class);
+		Event mockEvent = mock(Event.class);
+		FluencyPublisher mockFluencyPublisher = mock(FluencyPublisher.class);
+
+		when(mockChannel.getTransaction()).thenReturn(mockTransaction);
+		when(mockChannel.take()).thenReturn(mockEvent);
+		when(mockEvent.getBody()).thenReturn("{\"test\":\"test body\"}".getBytes(StandardCharsets.UTF_8));
+
+		FluentdSink sink = new FluentdSink();
+		sink.setChannel(mockChannel);
+		sink.publisher = mockFluencyPublisher;
+		assertNotNull(sink.publisher);
+
+		try {
+			doThrow(new RuntimeException()).when(mockFluencyPublisher).publish(mockEvent);
+		} catch (IOException e) {
+			fail("fail!");
+		}
+		Status status = sink.process();
+		assertEquals(status, Status.BACKOFF);
+
+		verify(mockTransaction, times(1)).begin();
+		verify(mockTransaction, times(1)).rollback();
+		verify(mockTransaction, times(1)).close();
+	}
 }
