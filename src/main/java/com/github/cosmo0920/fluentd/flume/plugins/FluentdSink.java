@@ -134,7 +134,7 @@ public class FluentdSink extends AbstractSink implements Configurable {
 					e);
 			status = Status.BACKOFF;
 			publisher.close();
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			transaction.rollback();
 			logger.error(
 					"Unable to parse event body. Exception follows.",

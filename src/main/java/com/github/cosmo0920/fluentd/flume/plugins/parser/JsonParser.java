@@ -19,7 +19,7 @@ public class JsonParser extends EventParser {
 	}
 
 	@Override
-	public Map<String, Object> parse(String entry) throws Exception {
+	public Map<String, Object> parse(String entry) throws RuntimeException {
 		try {
 			return mapper.readValue(entry, typeRef);
 		} catch (IOException e) {

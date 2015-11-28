@@ -42,7 +42,7 @@ class FluencyPublisher {
 		fluency = null;
 	}
 
-	public void publish(Event event) throws IOException, Exception {
+	public void publish(Event event) throws IOException, RuntimeException {
 		String body = new String(event.getBody(), StandardCharsets.UTF_8);
 		fluency.emit(tag, parser.parse(body));
 	}

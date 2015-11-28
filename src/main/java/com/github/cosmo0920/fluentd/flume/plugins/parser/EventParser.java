@@ -5,5 +5,5 @@ import java.util.Map;
 public abstract class EventParser {
 
 	public EventParser() {}
-	public abstract Map<String, Object> parse(String body) throws Exception;
+	public abstract Map<String, Object> parse(String body) throws RuntimeException;
 }
