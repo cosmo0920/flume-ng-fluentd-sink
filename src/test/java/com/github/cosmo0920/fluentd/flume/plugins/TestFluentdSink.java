@@ -74,7 +74,7 @@ public class TestFluentdSink {
 
 		try {
 			doThrow(new IOException()).when(mockFluencyPublisher).publish(mockEvent);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			fail("fail!");
 		}
 		Status status = sink.process();
