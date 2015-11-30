@@ -1,6 +1,8 @@
 Flume NG Fluentd Sink
 ===
 
+[![Build Status](https://travis-ci.org/cosmo0920/flume-ng-fluentd-sink.svg?branch=master)](https://travis-ci.org/cosmo0920/flume-ng-fluentd-sink)
+
 Apache Flume Sink plugin for Fluentd.
 
 ## Configuration
