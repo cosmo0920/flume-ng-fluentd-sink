@@ -25,9 +25,9 @@ public class TestParser {
 		String json = "{\"test\":\"message\"}";
 		JsonParser parser = new JsonParser();
 		Map<String, Object> result = parser.parse(json);
-		Map<String, Object> expect = new HashMap<String, Object>();
-		expect.put("test", "message");
-		assertEquals(expect, result);
+		Map<String, Object> expected = new HashMap<String, Object>();
+		expected.put("test", "message");
+		assertEquals(expected, result);
 	}
 
 	@Test
@@ -35,9 +35,9 @@ public class TestParser {
 		String eventBody = "test entry";
 		PlainTextParser parser = new PlainTextParser();
 		Map<String, Object> result = parser.parse(eventBody);
-		Map<String, Object> expect = new HashMap<String, Object>();
-		expect.put("message", "test entry");
-		assertEquals(expect, result);
+		Map<String, Object> expected = new HashMap<String, Object>();
+		expected.put("message", "test entry");
+		assertEquals(expected, result);
 	}
 
 	@Test
