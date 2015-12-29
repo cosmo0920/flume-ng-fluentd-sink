@@ -6,6 +6,7 @@ import org.komamitsu.fluency.Fluency;
 import java.nio.charset.StandardCharsets;
 import java.io.IOException;
 import java.lang.RuntimeException;
+import java.util.Map;
 
 import com.github.cosmo0920.fluentd.flume.plugins.parser.EventParser;
 import com.github.cosmo0920.fluentd.flume.plugins.parser.PlainTextParser;
@@ -16,6 +17,7 @@ class FluencyPublisher {
 	private String tag;
 	private String format;
 	private EventParser parser;
+	private static final String HEADER_TIMESTAMP = "timestamp";
 
 	public FluencyPublisher(String tag, String format) {
 		this.tag = tag;
@@ -39,9 +41,23 @@ class FluencyPublisher {
 		fluency = null;
 	}
 
+	public boolean containsHeader(Event event, String headerName) {
+		return event.getHeaders().containsKey(headerName);
+	}
+
+	public long getHeaderTimestamp(Event event) {
+		Map<String, String> headerMap = event.getHeaders();
+		return Long.parseLong(headerMap.get(HEADER_TIMESTAMP));
+	}
+
 	public void publish(Event event) throws IOException, RuntimeException {
 		String body = new String(event.getBody(), StandardCharsets.UTF_8);
-		fluency.emit(tag, parser.parse(body));
+		if (containsHeader(event, HEADER_TIMESTAMP)) {
+			long time = getHeaderTimestamp(event);
+			fluency.emit(tag, time, parser.parse(body));
+		} else {
+			fluency.emit(tag, parser.parse(body));
+		}
 	}
 
 	private EventParser setupEventParser() {
