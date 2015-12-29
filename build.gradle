@@ -5,7 +5,7 @@ plugins {
   id 'com.github.johnrengelman.shadow' version '1.2.2'
 }
 
-version = '0.0.1'
+version = '0.0.2'
 group = 'com.github.cosmo0920'
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
