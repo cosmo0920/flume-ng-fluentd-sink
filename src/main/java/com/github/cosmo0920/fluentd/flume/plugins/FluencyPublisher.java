@@ -44,7 +44,7 @@ class FluencyPublisher {
 		String body = new String(event.getBody(), StandardCharsets.UTF_8);
 		FlumeEventHandler handler = new FlumeEventHandler(event);
 		if (handler.containsHeader(HEADER_TIMESTAMP)) {
-			long time = handler.getHeader(HEADER_TIMESTAMP);
+			long time = handler.getHeader(HEADER_TIMESTAMP) / 1000;
 			fluency.emit(tag, time, parser.parse(body));
 		} else {
 			fluency.emit(tag, parser.parse(body));
