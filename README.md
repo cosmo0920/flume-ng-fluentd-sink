@@ -19,6 +19,8 @@ al.sinks.k1.hostname = localhost
 a1.sinks.k1.port = 24224
 a1.sinks.k1.tag = flume.fluentd.sink
 a1.sinks.k1.format = text
+# for file backup (not mandatory but recommended)
+# a1.sinks.k1.backupDir = /tmp/flume-ng-fluentd-sink
 ```
 
 `hostname`, `port`, and `tag` are optional.
