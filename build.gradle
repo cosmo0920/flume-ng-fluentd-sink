@@ -19,7 +19,7 @@ repositories {
 }
 
 dependencies {
-    compile group: 'org.komamitsu', name: 'fluency', version: '0.0.6'
+    compile group: 'org.komamitsu', name: 'fluency', version: '0.0.10'
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.12'
     compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.12'
     compile group: "org.apache.flume", name: 'flume-ng-core', version: '1.6.0'

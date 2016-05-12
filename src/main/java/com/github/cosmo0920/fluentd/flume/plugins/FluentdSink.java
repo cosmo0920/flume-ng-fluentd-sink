@@ -28,6 +28,7 @@ public class FluentdSink extends AbstractSink implements Configurable {
 	private int port;
 	private String tag;
 	private String format;
+	private String backupDir;
 
 	@VisibleForTesting
 	public FluencyPublisher publisher;
@@ -43,6 +44,7 @@ public class FluentdSink extends AbstractSink implements Configurable {
 		String portStr = context.getString("port");
 		tag = context.getString("tag");
 		format = context.getString("format");
+		backupDir = context.getString("backupDir");
 
 		if (portStr != null) {
 			port = Integer.parseInt(portStr);
@@ -58,6 +60,10 @@ public class FluentdSink extends AbstractSink implements Configurable {
 			tag = DEFAULT_TAG;
 		}
 
+		if (backupDir == null) {
+			logger.warn("Unable to find backupDir in conf. Log lost may happen.");
+		}
+
 		Preconditions.checkState(hostname != null, "No hostname specified");
 		Preconditions.checkState(tag != null, "No tag specified");
 		Preconditions.checkState(format != null, "No format specified");
@@ -70,7 +76,11 @@ public class FluentdSink extends AbstractSink implements Configurable {
 		logger.info("Fluentd sink starting");
 
 		try {
-			publisher.setup(hostname, port);
+			if (backupDir != null) {
+				publisher.setup(hostname, port, backupDir);
+			} else {
+				publisher.setup(hostname, port);
+			}
 		} catch (IOException e) {
 			logger.error("Unable to create Fluentd logger using hostname:"
 						 + hostname + " port:" + port + ". Exception follows.", e);
